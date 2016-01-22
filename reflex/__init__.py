@@ -11,49 +11,6 @@ Reflex is an image manipulation tool aimed at web developers
 
 """
 
-import hmac
-import hashlib
-import base64
-
-from .clients import Client
+from .api import transform, batch_transform
 from .mixins import TransformMixin
-
-
-def transform(proxy_url, source_url, operations=None, key=False):
-    if operations is None:
-        operations = []
-    elif isinstance(operations, basestring):
-            operations = [operations]
-
-    if key:
-        sig = sign_transform(source_url, key)
-        operations.append("s%s" % sig)
-
-    op_count = len(operations)
-    for i, operation in enumerate(operations):
-        if i != 0:
-            proxy_url += ","
-        proxy_url += "%s" % operation
-
-        if i+1 == op_count:
-            proxy_url += "/"
-
-    proxy_url += source_url
-    return proxy_url
-
-
-def batch_transform(proxy_url, source_urls, *args, **kwargs):
-    images = []
-
-    for source_url in source_urls:
-        transformed = transform(proxy_url, source_url, *args, **kwargs)
-        images.append(transformed)
-
-    return images
-
-
-def sign_transform(source_url, key):
-    sig = base64.urlsafe_b64encode(
-        hmac.new(key, msg=source_url, digestmod=hashlib.sha256).digest()
-    )
-    return sig
+from .clients import Client

@@ -44,3 +44,15 @@ Sign a source URL
 ```
 
 This is helpful if you'd like to generate source-signed transforms using a client-side language like Javascript (i.e. using `reflex-js`), but wish not to (and definitely should not) expose your Reflex `key`. Instead, the signature for a given `source_url` and Reflex `key` can be generated server side and exposed via a RESTful API or bootstrapped with the page.
+
+
+Using the Client
+
+```
+>>> from reflex import Client
+>>> r = Client("https://a.reflex.se.am/", key="testkey")
+>>> r.transform("http://example.com/image1.jpg", "400x400")
+'https://a.reflex.se.am/400x400,syclO5mOVIZLnvOIkEYj7b_jvXpyYyVCWAAgCQ-b0GyY=/http://example.com/image1.jpg'
+```
+
+The `Client` can be used to persist credentials that are likely to be shared between multiple transformations, e.g. `proxy_url` and `key`.
