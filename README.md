@@ -1,6 +1,6 @@
 # Reflex Python client
 
-Reflex is an image manipulation tool built for the Web
+Reflex is an image manipulation tool built for the Web. This is the Python client.
 
 ## Installation
 
@@ -34,3 +34,13 @@ Install the `reflex-client` via pip:
 ... )
 ['https://a.reflex.se.am/400x400/http://example.com/image1.jpg', 'https://a.reflex.se.am/400x400/http://example.com/image2.jpg', 'https://a.reflex.se.am/400x400/http://example.com/image3.jpg']
 ```
+
+Sign a source URL
+
+```
+>>> from reflex import sign_transform
+>>> sign_transform("http://example.com/image1.jpg", key="testkey")
+'yclO5mOVIZLnvOIkEYj7b_jvXpyYyVCWAAgCQ-b0GyY='
+```
+
+This is helpful if you'd like to generate source-signed transforms using a client-side language like Javascript (i.e. using `reflex-js`), but wish not to (and definitely should not) expose your Reflex `key`. Instead, the signature for a given `source_url` and Reflex `key` can be generated server side and exposed via a RESTful API or bootstrapped with the page.

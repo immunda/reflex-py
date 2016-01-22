@@ -26,7 +26,8 @@ def transform(proxy_url, source_url, operations=None, key=False):
             operations = [operations]
 
     if key:
-        operations.append("s%s" % base64.urlsafe_b64encode(hmac.new(key, msg=source_url, digestmod=hashlib.sha256).digest()))
+        sig = sign_transform(source_url, key)
+        operations.append("s%s" % sig)
 
     op_count = len(operations)
     for i, operation in enumerate(operations):
@@ -49,3 +50,10 @@ def batch_transform(proxy_url, source_urls, *args, **kwargs):
         images.append(transformed)
 
     return images
+
+
+def sign_transform(source_url, key):
+    sig = base64.urlsafe_b64encode(
+        hmac.new(key, msg=source_url, digestmod=hashlib.sha256).digest()
+    )
+    return sig
